@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>나에게 맞는 취미 찾기</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1 class="brand">취미 매칭 테스트</h1>
+    </header>
+
+    <div class="viewport">
+      <div id="track" class="track">
+        <!-- 0. Welcome -->
+        <section class="screen screen-center" data-screen="0">
+          <h2 class="hero">나에게 맞는 취미를 찾아볼까요?</h2>
+          <button class="btn btn-primary" id="startBtn">시작하기</button>
+        </section>
+
+        <!-- 1. 사용자 정보 입력 -->
+        <section class="screen" data-screen="1">
+          <h2>사용자 정보 입력</h2>
+          <form id="userForm" class="form">
+            <div class="form-row">
+              <label for="name">이름</label>
+              <input type="text" id="name" name="name" placeholder="예: 박주연" required />
+            </div>
+            <div class="form-row">
+              <label for="birth">생년월일</label>
+              <input type="date" id="birth" name="birth" required />
+            </div>
+            <div class="form-row">
+              <label>성별</label>
+              <div class="radio-group">
+                <label><input type="radio" name="gender" value="여성" required /> 여성</label>
+                <label><input type="radio" name="gender" value="남성" /> 남성</label>
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="phone">전화번호</label>
+              <input type="tel" id="phone" name="phone" inputmode="tel" placeholder="010-0000-0000" required />
+            </div>
+            <div class="actions">
+              <button type="submit" class="btn btn-primary">다음 (나이 계산)</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- 2. 프로필 요약 (이름/생년월일/나이 표시) -->
+        <section class="screen" data-screen="2">
+          <h2>프로필 확인</h2>
+          <div class="card" id="profileCard">
+            <div class="profile-main">
+              <div id="profileName" class="profile-name"></div>
+              <div id="profileAge" class="profile-age"></div>
+            </div>
+            <div class="profile-sub">
+              <div>생년월일: <span id="profileBirth"></span></div>
+              <div>성별: <span id="profileGender"></span></div>
+              <div>전화번호: <span id="profilePhone"></span></div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn" id="profileBack">이전</button>
+            <button class="btn btn-primary" id="toEI">다음</button>
+          </div>
+        </section>
+
+        <!-- 3. 외향/내향 2지선다 (선택 즉시 alert + 다음 화면) -->
+        <section class="screen" data-screen="3">
+          <h2 id="eiTitle">간단 질문</h2>
+          <p class="muted">아래 질문은 성향 안내용으로만 사용돼요. 선택 즉시 다음으로 넘어갑니다.</p>
+          <div class="options" id="eiOptions">
+            <!-- 라디오 2개: JS에서 이름 치환하여 렌더링 -->
+          </div>
+        </section>
+
+        <!-- 4. 10문항 테스트 (한 화면에 1문항, 진행률 10%) -->
+        <section class="screen" data-screen="4">
+          <div class="progress-wrap">
+            <div class="progress"><div id="progressBar" class="bar" style="width:0%"></div></div>
+            <div id="progressText" class="progress-text">0% (0/10)</div>
+          </div>
+
+          <div class="q-box">
+            <div id="qNumber" class="q-number">Q1</div>
+            <h3 id="qText" class="q-text">질문</h3>
+            <form id="qForm" class="q-form">
+              <label class="option">
+                <input type="radio" name="choice" value="1" required />
+                <span id="opt1">선택 1</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="choice" value="2" required />
+                <span id="opt2">선택 2</span>
+              </label>
+            </form>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="prevQ">이전</button>
+            <button class="btn btn-primary" id="nextQ">다음</button>
+          </div>
+        </section>
+
+        <!-- 5. 결과 화면 (유형/요약/추천/버튼) -->
+        <section class="screen" data-screen="5">
+          <h2 id="resultTitle" class="result-title">결과</h2>
+          <p id="resultSummary" class="result-summary"></p>
+
+          <div class="card">
+            <h4>추천 취미</h4>
+            <ul id="recommendList" class="recommend-list"></ul>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="toKits">키트 체험하기</button>
+            <button class="btn" id="toFriends">비슷한 취미 친구 찾기</button>
+          </div>
+        </section>
+
+        <!-- 6. 키트 화면 (유형별 임시 링크: 네이버) -->
+        <section class="screen" data-screen="6">
+          <h2>키트 체험</h2>
+          <p id="kitIntro" class="muted"></p>
+          <div class="card">
+            <ul id="kitList" class="link-list"></ul>
+          </div>
+          <div class="actions">
+            <button class="btn" id="backToResult1">결과로 돌아가기</button>
+          </div>
+        </section>
+
+        <!-- 7. 친구 찾기 화면 (유형별 고정 1명) -->
+        <section class="screen" data-screen="7">
+          <h2>비슷한 취미 친구</h2>
+          <div id="friendCard" class="card friend-card">
+            <!-- JS로 내용 렌더링 -->
+          </div>
+          <div class="actions">
+            <button class="btn" id="backToResult2">결과로 돌아가기</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer class="app-footer">
+      <small>© 2025 취미 매칭 프로젝트</small>
+    </footer>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
